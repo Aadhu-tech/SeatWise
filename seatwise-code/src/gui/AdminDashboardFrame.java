@@ -21,7 +21,7 @@ public class AdminDashboardFrame extends JFrame {
             new SwingWorker<AllocationResult, Void>() {
                 protected AllocationResult doInBackground() {
                     SeatAllocator allocator = new SeatAllocator();
-                    return allocator.allocateSeatsForExam("EX01");
+                    return allocator.allocateSeatsForExam("EXAM1");
                 }
                 protected void done() {
                     try {

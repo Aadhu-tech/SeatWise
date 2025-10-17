@@ -7,10 +7,11 @@ import java.io.InputStream;
 public class DatabaseConnection {
     private static String DB_HOST = "localhost";
     private static String DB_PORT = "3306";
-    private static String DB_NAME = "smartexam";
+    private static String DB_NAME = "mydatabase";
     private static String DB_USER = "root";
-    private static String DB_PASSWORD = "";
-    private static String URL;
+    private static String DB_PASSWORD = "devikrishna";
+    private static String URL= "jdbc:mysql://localhost:3306/mydatabase?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+;
     static {
         try (InputStream in = DatabaseConnection.class.getResourceAsStream("/db.properties")) {
             if (in != null) {
