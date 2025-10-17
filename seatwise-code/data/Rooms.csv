@@ -1,5 +1,7 @@
-RoomNo,Capacity
-R101,3
-R102,3
-R103,2
-R104,4
+roomId,capacity,isBackup
+R101,30,false
+R102,30,false
+R103,30,false
+R201,40,true
+R202,40,true
+R203,40,true
