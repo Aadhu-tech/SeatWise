@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class ExamSlotDAO {
     public void insertExamSlot(ExamSlot slot) throws SQLException {
-        String sql = "INSERT INTO ExamSlot (exam_slot_id, subject, date) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO ExamSlot (exam_slot_id, subject, date) VALUES (?, ?, ?) " +
+                     "ON DUPLICATE KEY UPDATE subject = VALUES(subject), date = VALUES(date)";
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, slot.getExamSlotId());

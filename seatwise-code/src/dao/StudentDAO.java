@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class StudentDAO {
     public void insertStudent(Student student) throws SQLException {
-        String sql = "INSERT INTO Student (student_id, name, branch) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Student (student_id, name, branch) VALUES (?, ?, ?) " +
+                     "ON DUPLICATE KEY UPDATE name = VALUES(name), branch = VALUES(branch)";
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, student.getStudentId());

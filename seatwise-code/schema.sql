@@ -44,6 +44,14 @@ CREATE TABLE IF NOT EXISTS AdminWarning (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Login credentials
+CREATE TABLE IF NOT EXISTS Login (
+  username VARCHAR(50) PRIMARY KEY,
+  password VARCHAR(100) NOT NULL,
+  student_id VARCHAR(50) NOT NULL,
+  CONSTRAINT fk_login_student FOREIGN KEY (student_id) REFERENCES Student(student_id) ON DELETE CASCADE
+);
+
 -- Seed sample data (optional)
 INSERT INTO Room (room_id, capacity, is_backup) VALUES
   ('R101', 30, FALSE),

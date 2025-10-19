@@ -15,18 +15,23 @@ public class UserLoginFrame extends JFrame {
         loginButton = new JButton("Login"); loginButton.setBounds(140,150,100,30); add(loginButton);
         loginButton.addActionListener(ignored -> {
             String username = usernameField.getText().trim();
-            if (username.equalsIgnoreCase("admin")) {
-                JOptionPane.showMessageDialog(this, "Logged in as Admin");
-                new AdminDashboardFrame();
+            String password = new String(passwordField.getPassword());
+            
+            // Validate login through database
+            dao.LoginDAO.LoginCredentials credentials = dao.LoginDAO.validateLogin(username, password);
+            if (credentials != null) {
+                if (credentials.studentId.equals("admin")) {
+                    // Admin login
+                    JOptionPane.showMessageDialog(this, "Logged in as Admin");
+                    SwingUtilities.invokeLater(() -> new AdminDashboardFrame());
+                } else {
+                    // Student login
+                    JOptionPane.showMessageDialog(this, "Welcome, " + username + "!");
+                    SwingUtilities.invokeLater(() -> new StudentDashboardFrame(credentials));
+                }
                 dispose();
             } else {
-                ReportGenerator rg = new ReportGenerator();
-                model.AllocationRecord rec = rg.getStudentAllocation(username);
-                if (rec != null) {
-                    JOptionPane.showMessageDialog(this, "Your Seat:\nRoom: " + rec.getRoomId() + "\nSeat: " + rec.getSeatNo() + "\nSlot: " + rec.getExamSlotId());
-                } else {
-                    JOptionPane.showMessageDialog(this, "No seat allocated yet for student id: " + username);
-                }
+                JOptionPane.showMessageDialog(this, "Invalid username or password. Please try again.");
             }
         });
         setLocationRelativeTo(null); setVisible(true);

@@ -4,6 +4,8 @@ import dao.DatabaseConnection;
 import model.AllocationRecord;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 import dao.StudentDAO;
 import dao.RoomDAO;
@@ -22,6 +24,17 @@ public class SeatAllocator {
         List<String> warnings = new ArrayList<>();
         List<AllocationRecord> allocations = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
+            // Verify exam slot exists
+            String checkExamSql = "SELECT COUNT(*) FROM ExamSlot WHERE exam_slot_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(checkExamSql)) {
+                ps.setString(1, examSlotId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        warnings.add("Exam slot '" + examSlotId + "' does not exist. Please upload exam slots first.");
+                        return new AllocationResult(false, warnings, allocations);
+                    }
+                }
+            }
             conn.setAutoCommit(false);
             StudentDAO sdao = new StudentDAO();
             RoomDAO rdao = new RoomDAO();

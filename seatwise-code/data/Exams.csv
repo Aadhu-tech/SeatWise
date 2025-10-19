@@ -1,3 +1,6 @@
-ExamID,Subject,Date,Time
-E01,OOP,2025-10-15,10:00 AM
-E02,DBMS,2025-10-17,2:00 PM
+exam_slot_id,subject,date
+EXAM1,Mathematics,2025-01-15
+EXAM2,Computer Science,2025-01-16
+EXAM3,Physics,2025-01-17
+EXAM4,Data Structures,2025-01-18
+EXAM5,Algorithms,2025-01-19
