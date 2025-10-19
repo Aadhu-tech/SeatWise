@@ -11,19 +11,24 @@ public class AllocationDAO {
             ps.executeUpdate();
         }
     }
-    public static void saveAllocationBatch(Connection conn, List<AllocationRecord> allocations) throws SQLException {
-        String sql = "INSERT INTO Allocation (student_id, room_id, seat_no, exam_slot_id) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (AllocationRecord r : allocations) {
-                ps.setString(1, r.getStudentId());
-                ps.setString(2, r.getRoomId());
-                ps.setInt(3, r.getSeatNo());
-                ps.setString(4, r.getExamSlotId());
-                ps.addBatch();
-            }
-            ps.executeBatch();
+    // ...existing code...
+public static void saveAllocationBatch(Connection conn, List<AllocationRecord> allocations) throws SQLException {
+    // This will insert new rows; if a unique-key conflict occurs it WILL overwrite student_id for that seat
+    String sql = "INSERT INTO Allocation (student_id, room_id, seat_no, exam_slot_id) VALUES (?, ?, ?, ?)"
+               + " ON DUPLICATE KEY UPDATE student_id = VALUES(student_id)";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        for (AllocationRecord r : allocations) {
+            ps.setString(1, r.getStudentId());
+            ps.setString(2, r.getRoomId());
+            ps.setInt(3, r.getSeatNo());
+            ps.setString(4, r.getExamSlotId());
+            ps.addBatch();
         }
+        ps.executeBatch();
     }
+}
+// ...existing code...
+    
     public static List<AllocationRecord> fetchAllAllocations() {
         List<AllocationRecord> list = new ArrayList<>();
         String sql = "SELECT a.student_id, s.name, s.branch, a.room_id, a.seat_no, a.exam_slot_id "
